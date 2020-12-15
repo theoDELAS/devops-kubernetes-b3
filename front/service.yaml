@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: front
+  labels:
+    app: front
+spec:
+  selector: # Correspond au labels des pods à load-balancer
+    app: front
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 80
+  type: ClusterIP # type par default

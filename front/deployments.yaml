@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: front
+  labels: &labels # <- Reference pour ré-utiliser l'objet plus tard
+    app: front
+spec:
+  replicas: 3
+  selector:
+    matchLabels: *labels # <- Utilisation de la référence
+  strategy: {}
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels: *labels # <- Utilisation de la référence
+    spec:
+      containers:
+        - name: app
+          image: wordpress
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 50m
+              memory: 32Mi
+
+#### QOS => Quality Of Service
+# * Si un pod a : limits === requests => Guaranteed
+# * Si un pod a : limits > requests => Burstable
+# * Si un pod a pas de limit ni de request => BestEffort
+#
+# Les pods Guaranteed sont prioritaire au pod Burstable qui sont prioritaire au pods BestEffort
